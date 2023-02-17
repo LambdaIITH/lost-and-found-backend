@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "market-place-backend"
+version = "0.1.0"
+description = ""
+authors = ["Aayush2492 <aayushpatel2402@gmail.com>"]
+readme = "README.md"
+packages = [{include = "market_place_backend"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.92.0"
+uvicorn = "^0.20.0"
+python-dotenv = "^0.21.1"
+psycopg2-binary = "^2.9.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
