@@ -14,14 +14,14 @@ This repository contains the code for the backend of a college lost and found ap
 
 - `pyproject.toml` - Contains the dependecies.
 - `main.py` - Contains the backend API routes.
-- `db/init.sql` - Schema for the database.
+- `init.sql` - Schema for the database.
 - `.env.example` - Format for the .env file to connect to PostgreSQL.
 
 ### Steps
 
 - Install the above tools. </br>
 - Install the dependencies from the `pyproject.toml` file. </br>
-- Refer to the sql file in `db/init.sql` to get the models used in the database.
+- Refer to the sql file in `init.sql` to get the models used in the database.
 - Initialize a `.env` file, following `.env.example` accordingly.
 - Feel free to change around the database schema as seen fit.
 
