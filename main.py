@@ -24,6 +24,7 @@ conn = psycopg2.connect(
 print("Opened database successfully!")
 
 app = FastAPI()
+#just a tial commit
 
 # http://127.0.0.1:8000/
 @app.get("/")
