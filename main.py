@@ -73,3 +73,33 @@ def update_item_status(item_id: int):
         raise HTTPException(status_code=200, detail="Status updated successfully")
     else:
         raise HTTPException(status_code=400, detail="Status update failed")
+
+
+# http://127.0.0.1:8000/items/?sort=date
+@app.get("/items/")
+async def get_all_items(sort: str = None):
+    if (sort == None):
+        sort = "date_of_posting"
+
+    print(sort)
+
+    res_raw = queries.get_all_items(conn)
+
+    if (res_raw == None):
+        raise HTTPException(status_code=404, detail="No Items found")
+
+    # converts the result to a json object
+    res_get = json.dumps(res_raw, default=str)
+    res_get = json.loads(res_get)
+
+    # sorts the result based on the parameter
+    try:
+        res_get = sorted(res_get, key=lambda k: k[sort])
+    except:
+        raise HTTPException(status_code=404, detail="Invalid sort parameter")
+
+    if (len(res_get) == 0):
+        raise HTTPException(status_code=404, detail="No Items found")
+
+
+    raise HTTPException(status_code=200, detail=res_get)

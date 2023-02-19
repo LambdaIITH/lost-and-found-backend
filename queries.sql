@@ -14,3 +14,7 @@ SELECT * FROM lost WHERE id = :item_id;
 
 -- name: update_item_status!
 UPDATE lost SET status = :status WHERE id = :item_id;
+
+
+-- name: get_all_items
+SELECT * FROM lost;
