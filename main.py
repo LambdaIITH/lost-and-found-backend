@@ -29,6 +29,7 @@ conn = psycopg2.connect(
     cursor_factory=RealDictCursor,
 )
 
+#decorator to check if user is the owner of the item
 def user_check(func):
     @wraps(func)
     async def innerfunction(*args, **kwargs):
@@ -41,6 +42,7 @@ def user_check(func):
         return {"error": "You are not the owner of this item"}
     return innerfunction
 
+#decorator to check if user is logged in
 def is_authenticated(func):
     @wraps(func)
     async def innerfunction(*args, **kwargs):
@@ -119,6 +121,7 @@ async def update_item(request:Request, id):
     queries.update_item(conn, id=id)
     conn.commit()
 
+# Route to add user with their phone number
 @app.post('/add_user/{phone_number}}')
 @is_authenticated 
 async def add_user(phone_number, request: Request):
