@@ -125,6 +125,6 @@ async def update_item(request:Request, id):
     conn.commit()
     
 @app.post('/add_user')
-def add_user(user: User):
+async def add_user(user: User):
     queries.add_user(conn, name=user.name, email=user.email, phone_number=user.phone_number)
     conn.commit()
