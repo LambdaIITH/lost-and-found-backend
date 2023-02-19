@@ -20,7 +20,7 @@ CREATE TABLE lost (
 -- insert a new item into the lost table
 INSERT INTO lost (name, description, user_email) VALUES (:name, :description, :user_email);
 
---name: get_all_items!
+--name: get_all_items
 -- get all items from the lost table which are still not found
 SELECT * FROM lost where status = false order by date_of_posting desc;
 
@@ -28,7 +28,7 @@ SELECT * FROM lost where status = false order by date_of_posting desc;
 -- update the status of an item to found
 UPDATE lost SET status = true where id = :id;
 
---name: get_email!
+--name: get_email
 -- get the email of the user given the lost item id
 SELECT user_email FROM lost where id = :id;
 

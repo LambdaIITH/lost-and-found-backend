@@ -36,7 +36,7 @@ def user_check(func):
         lost_email = queries.get_email(conn, id=kwargs['id'])
         if user is not None:
             user_email = user['email']
-            if user_email == lost_email[0]['seller_email']:
+            if user_email == lost_email[0]['user_email']:
                 return await func(*args, **kwargs)
         return {"error": "You are not the owner of this item"}
     return innerfunction
@@ -118,8 +118,9 @@ async def get_items():
 async def update_item(request:Request, id):
     queries.update_item(conn, id=id)
     conn.commit()
-    
+
 @app.post('/add_user/{phone_number}}')
+@is_authenticated 
 async def add_user(phone_number, request: Request):
     queries.add_user(conn, name=request.session.get('user')['name'], email=request.session.get('user')['name'], phone_number=phone_number)
     conn.commit()
