@@ -41,9 +41,18 @@ def user_check(func):
         return {"error": "You are not the owner of this item"}
     return innerfunction
 
+def is_authenticated(func):
+    @wraps(func)
+    async def innerfunction(*args, **kwargs):
+        user = kwargs['request'].session.get('user')
+        if user is not None:
+            return await func(*args, **kwargs)
+        return {"error": "You are not logged in"}
+    return innerfunction
+
 app = FastAPI()
 queries = aiosql.from_path("init.sql", "psycopg2")
-queries.create_schema(conn)
+# queries.create_schema(conn)
 conn.commit()
 
 app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
@@ -59,9 +68,8 @@ oauth.register(
 )
 
 class lostItem(BaseModel):
-    name: str
+    item_name: str
     description: str
-    user_email: str
 
 # http://127.0.0.1:8000/
 @app.get("/")
@@ -93,8 +101,9 @@ async def auth(request: Request):
 # http://127.0.0.1:8000/lost
 # Route to add lost item
 @app.post('/lost')
-async def lost_item(item: lostItem):
-    queries.insert_item(conn, name=item.name, description=item.description, user_email=item.user_email)
+@is_authenticated
+async def lost_item(request:Request, item: lostItem):
+    queries.insert_item(conn, name=item.item_name, description=item.description, user_email=request.session.get('user')['email'])
     conn.commit()
 
 # Route to get all lost items
