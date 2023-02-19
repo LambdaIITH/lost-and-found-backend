@@ -124,7 +124,7 @@ class FoundItem(BaseModel):
     user_email: str
 
 @app.patch("/items/{item_id}")
-def update_item_status(request: Request,found_item: FoundItem, email: str = Depends(get_access_token)):
+def update_item_status(request: Request,found_item: FoundItem, item_id: int, email: str = Depends(get_access_token)):
     #item_id = request.match_info['item_id']
     # update the status of the item
     
