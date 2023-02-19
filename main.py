@@ -119,13 +119,16 @@ def read_root():
 # http://127.0.0.1:8000/items/{item_id}
 # this is an API that lets the user who lost an item to update the status of the item 
 # will use aiosql to query the database
+class FoundItem(BaseModel):
+    item_id: int
+    user_email: str
+
 @app.patch("/items/{item_id}")
-def update_item_status(request: Request,item_id: int, email: str = Depends(get_access_token)):
+def update_item_status(request: Request,found_item: FoundItem, email: str = Depends(get_access_token)):
     #item_id = request.match_info['item_id']
     # update the status of the item
-    user_email = ""
     
-    if email != user_email:
+    if email != found_item.user_email:
         raise HTTPException(status_code=403, detail="Forbidden")
 
     # gets the information of the item to be edited
