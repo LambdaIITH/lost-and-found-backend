@@ -109,9 +109,10 @@ async def lost_item(request:Request, item: lostItem):
     conn.commit()
 
 # Route to get all lost items
-@app.get('/get-items')
-async def get_items():
-    items = queries.get_all_items(conn)
+@app.get('/get-items/{order_by}}')
+async def get_items(order_by):
+    key_dict = {'2': 'date_of_posting', '1': 'name'}
+    items = queries.get_all_items(conn, order_by=key_dict[order_by])
     return items
 
 # Route to get update status of lost item

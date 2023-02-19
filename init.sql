@@ -22,7 +22,7 @@ INSERT INTO lost (name, description, user_email) VALUES (:name, :description, :u
 
 --name: get_all_items
 -- get all items from the lost table which are still not found
-SELECT * FROM lost where status = false order by date_of_posting desc;
+SELECT * FROM lost where status = false order by :order_by desc;
 
 --name: update_item!
 -- update the status of an item to found
