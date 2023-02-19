@@ -31,3 +31,7 @@ UPDATE lost SET status = true where id = :id;
 --name: get_email!
 -- get the email of the user given the lost item id
 SELECT user_email FROM lost where id = :id;
+
+--name: add_user!
+-- add a new user to the users table
+INSERT INTO users (name, email, phone_number) VALUES (:name, :email, :phone_number);
