@@ -37,6 +37,9 @@ conn = psycopg2.connect(
 
 queries = aiosql.from_path("./queries.sql", "psycopg2")
 app = FastAPI()
+#just a tial commit
+
+#hello world
 
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
     authorizationUrl="https://accounts.google.com/o/oauth2/v2/auth",
