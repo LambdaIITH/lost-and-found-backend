@@ -71,11 +71,6 @@ class lostItem(BaseModel):
     item_name: str
     description: str
 
-class User(BaseModel):
-    name: str
-    email: str
-    phone_number: str
-
 # http://127.0.0.1:8000/
 @app.get("/")
 def read_root(request: Request):
@@ -124,7 +119,7 @@ async def update_item(request:Request, id):
     queries.update_item(conn, id=id)
     conn.commit()
     
-@app.post('/add_user')
-async def add_user(user: User):
-    queries.add_user(conn, name=user.name, email=user.email, phone_number=user.phone_number)
+@app.post('/add_user/{phone_number}}')
+async def add_user(phone_number, request: Request):
+    queries.add_user(conn, name=request.session.get('user')['name'], email=request.session.get('user')['name'], phone_number=phone_number)
     conn.commit()
