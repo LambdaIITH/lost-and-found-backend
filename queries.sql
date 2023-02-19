@@ -18,3 +18,6 @@ UPDATE lost SET status = :status WHERE id = :item_id;
 
 -- name: get_all_items
 SELECT * FROM lost;
+
+-- name: create_item!
+insert into lost (name, description, user_email) values (:name, :description, :user_email);

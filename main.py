@@ -33,6 +33,11 @@ print("Opened database successfully!")
 app = FastAPI()
 queries = aiosql.from_path("./queries.sql", "psycopg2")
 
+class lostItem(BaseModel):
+     name: str
+     description: str
+     user_email: str
+
 # http://127.0.0.1:8000/
 @app.get("/")
 def read_root():
@@ -75,13 +80,11 @@ def update_item_status(item_id: int):
         raise HTTPException(status_code=400, detail="Status update failed")
 
 
-# http://127.0.0.1:8000/items/?sort=date
+# http://127.0.0.1:8000/items/?sort=name
 @app.get("/items/")
 async def get_all_items(sort: str = None):
     if (sort == None):
         sort = "date_of_posting"
-
-    print(sort)
 
     res_raw = queries.get_all_items(conn)
 
@@ -103,3 +106,21 @@ async def get_all_items(sort: str = None):
 
 
     raise HTTPException(status_code=200, detail=res_get)
+
+
+# http://127.0.0.1:8000/items/
+@app.post("/items")
+def create_item(item: lostItem):
+    user_email = item.user_email
+    name = item.name
+    description = item.description
+    
+    res = queries.create_item(conn, user_email=user_email, name=name, description=description)
+
+    conn.commit()
+
+    if (res):
+        raise HTTPException(status_code=200, detail="Item created successfully")
+    else:
+        raise HTTPException(status_code=400, detail="Item creation failed")
+
