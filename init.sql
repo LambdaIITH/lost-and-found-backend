@@ -27,3 +27,7 @@ SELECT * FROM lost where status = false order by date_of_posting desc;
 --name: update_item!
 -- update the status of an item to found
 UPDATE lost SET status = true where id = :id;
+
+--name: get_email!
+-- get the email of the user given the lost item id
+SELECT user_email FROM lost where id = :id;

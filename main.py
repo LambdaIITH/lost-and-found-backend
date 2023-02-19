@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import RedirectResponse, HTMLResponse
 import aiosql
+from functools import wraps
 
 # load environment variables
 load_dotenv(".env")
@@ -27,6 +28,18 @@ conn = psycopg2.connect(
     port=POSTGRES_PORT,
     cursor_factory=RealDictCursor,
 )
+
+def user_check(func):
+    @wraps(func)
+    async def innerfunction(*args, **kwargs):
+        user = kwargs['request'].session.get('user')
+        lost_email = queries.get_email(conn, id=kwargs['id'])
+        if user is not None:
+            user_email = user['email']
+            if user_email == lost_email[0]['seller_email']:
+                return await func(*args, **kwargs)
+        return {"error": "You are not the owner of this item"}
+    return innerfunction
 
 app = FastAPI()
 queries = aiosql.from_path("init.sql", "psycopg2")
@@ -84,14 +97,15 @@ async def lost_item(item: lostItem):
     queries.insert_item(conn, name=item.name, description=item.description, user_email=item.user_email)
     conn.commit()
 
-@app.get('/get-items')
 # Route to get all lost items
+@app.get('/get-items')
 async def get_items():
     items = queries.get_all_items(conn)
     return items
 
 # Route to get update status of lost item
 @app.put('/update-item/{id}')
-async def update_item(id):
+@user_check
+async def update_item(request:Request, id):
     queries.update_item(conn, id=id)
     conn.commit()
